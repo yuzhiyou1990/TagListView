@@ -134,6 +134,12 @@ open class TagListView: UIView {
         }
     }
     
+    @IBInspectable open dynamic var fixedHeight: CGFloat = 0 {
+        didSet {
+            rearrangeViews()
+        }
+    }
+    
     @objc public enum Alignment: Int {
         case left
         case center
@@ -324,7 +330,7 @@ open class TagListView: UIView {
                 currentRowView.frame.origin.x = frameWidth - (currentRowWidth - marginX)
             }
             currentRowView.frame.size.width = currentRowWidth
-            currentRowView.frame.size.height = max(tagViewHeight, currentRowView.frame.height)
+            currentRowView.frame.size.height = fixedHeight > 0 ? fixedHeight : max(tagViewHeight, currentRowView.frame.height)
         }
         rows = currentRow
         
