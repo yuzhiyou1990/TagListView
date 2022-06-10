@@ -140,6 +140,8 @@ open class TagListView: UIView {
         }
     }
     
+    @IBInspectable open dynamic var enableLongPress: Bool = true
+    
     @objc public enum Alignment: Int {
         case left
         case center
@@ -406,6 +408,8 @@ open class TagListView: UIView {
         
         // On long press, deselect all tags except this one
         tagView.onLongPress = { [unowned self] this in
+            guard self.enableLongPress else { return }
+            
             self.tagViews.forEach {
                 $0.isSelected = $0 == this
             }
