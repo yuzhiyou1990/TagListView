@@ -361,6 +361,7 @@ open class TagListView: UIView {
         }
         return tagViewSize
     }
+    
     public static func estimateHeight(tags: [String],
                                       width: CGFloat,
                                       textFont: UIFont,
@@ -370,16 +371,32 @@ open class TagListView: UIView {
                                       marginX: CGFloat = 0,
                                       marginY: CGFloat = 0,
                                       fixedHeight: CGFloat = 0) -> CGFloat {
-//        var currentRow = 0
-//        var currentRowTagCount = 0
-//        var currentRowWidth: CGFloat = 0
-//        let frameWidth = width
-//        var currentRowHeight: CGFloat = 0
-//
-//        for tag in tags {
-//            let tagViewSize = Self.estimateTagViewSize(tag: tag, textFont: textFont, paddingX: paddingX, paddingY: paddingY)
-//            currentRowHeight = tagViewSize.height
-//        }
+        var currentRow = 0
+        var currentRowTagCount = 0
+        var currentRowWidth: CGFloat = 0
+        let frameWidth = width
+        var currentRowHeight: CGFloat = 0
+
+        for tag in tags {
+            var tagViewSize = Self.estimateTagViewSize(tag: tag, textFont: textFont, paddingX: paddingX, paddingY: paddingY)
+            currentRowHeight = tagViewSize.height + marginY
+            
+            if currentRowTagCount == 0 || currentRowWidth + tagViewSize.width > frameWidth {
+                currentRow += 1
+                currentRowWidth = 0
+                currentRowTagCount = 0
+                
+                tagViewSize.width = min(tagViewSize.width, frameWidth)
+            }
+            
+            currentRowTagCount += 1
+            currentRowWidth += tagViewSize.width + marginX
+        }
+        
+        var height = CGFloat(currentRow) * currentRowHeight
+        if currentRow > 0 {
+            height -= marginY
+        }
         return 0
     }
     
