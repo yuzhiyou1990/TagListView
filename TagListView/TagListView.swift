@@ -337,12 +337,9 @@ open class TagListView: UIView {
         return CGSize(width: frame.width, height: height)
     }
     
-    public static func estimateTagViewSize(tag: String,
-                                           textFont: UIFont,
-                                           paddingX: CGFloat,
-                                           paddingY: CGFloat) -> CGSize {
+    public static func estimateTagViewSize(tag: String, textFont: UIFont, paddingX: CGFloat, paddingY: CGFloat) -> CGSize {
         var tagViewSize = tag.size(withAttributes: [NSAttributedString.Key.font: textFont])
-        tagViewSize.height = textFont.pointSize + paddingY * 2
+        tagViewSize.height = max(textFont.pointSize, tagViewSize.height) + paddingY * 2
         tagViewSize.width += paddingX * 2
         if tagViewSize.width < tagViewSize.height {
             tagViewSize.width = tagViewSize.height
@@ -350,14 +347,7 @@ open class TagListView: UIView {
         return tagViewSize
     }
     
-    public static func estimateHeight(tags: [String],
-                                      width: CGFloat,
-                                      textFont: UIFont,
-                                      alignment: Alignment = .left,
-                                      paddingX: CGFloat = 0,
-                                      paddingY: CGFloat = 0,
-                                      marginX: CGFloat = 0,
-                                      marginY: CGFloat = 0) -> CGFloat {
+    public static func estimateHeight(tags: [String], width: CGFloat, textFont: UIFont, alignment: Alignment = .left, paddingX: CGFloat = 0, paddingY: CGFloat = 0, marginX: CGFloat = 0, marginY: CGFloat = 0, tagViewHeight: CGFloat = 0) -> CGFloat {
         var currentRow = 0
         var currentRowTagCount = 0
         var currentRowWidth: CGFloat = 0
@@ -366,6 +356,9 @@ open class TagListView: UIView {
 
         for tag in tags {
             var tagViewSize = Self.estimateTagViewSize(tag: tag, textFont: textFont, paddingX: paddingX, paddingY: paddingY)
+            if tagViewHeight > 0 {
+                tagViewSize.height = tagViewHeight
+            }
             currentRowHeight = tagViewSize.height + marginY
             
             if currentRowTagCount == 0 || currentRowWidth + tagViewSize.width > frameWidth {

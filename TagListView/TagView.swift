@@ -169,6 +169,8 @@ open class TagView: UIButton {
     
     private func setupView() {
         titleLabel?.lineBreakMode = titleLineBreakMode
+        titleLabel?.numberOfLines = 0
+        titleLabel?.textAlignment = .center
 
         frame.size = intrinsicContentSize
         addSubview(removeButton)
@@ -186,7 +188,7 @@ open class TagView: UIButton {
 
     override open var intrinsicContentSize: CGSize {
         var size = titleLabel?.text?.size(withAttributes: [NSAttributedString.Key.font: textFont]) ?? CGSize.zero
-        size.height = textFont.pointSize + paddingY * 2
+        size.height = max(textFont.pointSize, size.height) + paddingY * 2
         size.width += paddingX * 2
         if size.width < size.height {
             size.width = size.height
