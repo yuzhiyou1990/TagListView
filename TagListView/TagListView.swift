@@ -419,30 +419,32 @@ open class TagListView: UIView {
     }
 
     @discardableResult
-    open func addTag(_ title: String) -> TagView {
+    open func addTag(_ title: String, selected: Bool = false) -> TagView {
         defer { rearrangeViews() }
-        return addTagView(createNewTagView(title))
+        return addTagView(createNewTagView(title), selected: selected)
     }
     
     @discardableResult
-    open func addTags(_ titles: [String]) -> [TagView] {
-        return addTagViews(titles.map(createNewTagView))
+    open func addTags(_ titles: [String], selected: Bool = false) -> [TagView] {
+        return addTagViews(titles.map(createNewTagView), selected: selected)
     }
     
     @discardableResult
-    open func addTagView(_ tagView: TagView) -> TagView {
+    open func addTagView(_ tagView: TagView, selected: Bool = false) -> TagView {
         defer { rearrangeViews() }
         tagViews.append(tagView)
+        tagView.isSelected = selected
         tagBackgroundViews.append(UIView(frame: tagView.bounds))
         
         return tagView
     }
     
     @discardableResult
-    open func addTagViews(_ tagViewList: [TagView]) -> [TagView] {
+    open func addTagViews(_ tagViewList: [TagView], selected: Bool = false) -> [TagView] {
         defer { rearrangeViews() }
         tagViewList.forEach {
             tagViews.append($0)
+            $0.isSelected = selected
             tagBackgroundViews.append(UIView(frame: $0.bounds))
         }
         return tagViews
