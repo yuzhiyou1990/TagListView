@@ -128,18 +128,6 @@ open class TagListView: UIView {
         }
     }
     
-    @IBInspectable open dynamic var fixedWidth: CGFloat = 0 {
-        didSet {
-            rearrangeViews()
-        }
-    }
-    
-    @IBInspectable open dynamic var fixedHeight: CGFloat = 0 {
-        didSet {
-            rearrangeViews()
-        }
-    }
-    
     @IBInspectable open dynamic var enableLongPress: Bool = true
     
     @objc public enum Alignment: Int {
@@ -286,7 +274,7 @@ open class TagListView: UIView {
         
         for (index, tagView) in tagViews.enumerated() {
             tagView.frame.size = tagView.intrinsicContentSize
-            tagViewHeight = fixedHeight > 0 ? fixedHeight : tagView.frame.height
+            tagViewHeight = tagView.frame.height
             
             if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frameWidth {
                 currentRow += 1
@@ -308,7 +296,7 @@ open class TagListView: UIView {
                 x: currentRowWidth,
                 y: 0)
             tagBackgroundView.frame.size = tagView.bounds.size
-            tagView.frame.size.width = fixedWidth > 0 ? fixedWidth : max(minWidth, tagView.frame.size.width)
+            tagView.frame.size.width = max(minWidth, tagView.frame.size.width)
             
             tagBackgroundView.layer.shadowColor = shadowColor.cgColor
             tagBackgroundView.layer.shadowPath = UIBezierPath(roundedRect: tagBackgroundView.bounds, cornerRadius: cornerRadius).cgPath
@@ -369,8 +357,7 @@ open class TagListView: UIView {
                                       paddingX: CGFloat = 0,
                                       paddingY: CGFloat = 0,
                                       marginX: CGFloat = 0,
-                                      marginY: CGFloat = 0,
-                                      fixedHeight: CGFloat = 0) -> CGFloat {
+                                      marginY: CGFloat = 0) -> CGFloat {
         var currentRow = 0
         var currentRowTagCount = 0
         var currentRowWidth: CGFloat = 0
@@ -397,7 +384,7 @@ open class TagListView: UIView {
         if currentRow > 0 {
             height -= marginY
         }
-        return 0
+        return height
     }
     
     private func createNewTagView(_ title: String) -> TagView {
