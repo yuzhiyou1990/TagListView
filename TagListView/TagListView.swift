@@ -284,7 +284,7 @@ open class TagListView: UIView {
         
         for (index, tagView) in tagViews.enumerated() {
             tagView.frame.size = tagView.intrinsicContentSize
-            tagViewHeight = tagView.frame.height
+            tagViewHeight = fixedHeight > 0 ? fixedHeight : tagView.frame.height
             
             if currentRowTagCount == 0 || currentRowWidth + tagView.frame.width > frameWidth {
                 currentRow += 1
@@ -330,7 +330,7 @@ open class TagListView: UIView {
                 currentRowView.frame.origin.x = frameWidth - (currentRowWidth - marginX)
             }
             currentRowView.frame.size.width = currentRowWidth
-            currentRowView.frame.size.height = fixedHeight > 0 ? fixedHeight : max(tagViewHeight, currentRowView.frame.height)
+            currentRowView.frame.size.height = max(tagViewHeight, currentRowView.frame.height)
         }
         rows = currentRow
         
@@ -345,6 +345,40 @@ open class TagListView: UIView {
             height -= marginY
         }
         return CGSize(width: frame.width, height: height)
+    }
+    
+    public static func estimateTagViewSize(tag: String,
+                                           textFont: UIFont,
+                                           paddingX: CGFloat,
+                                           paddingY: CGFloat) -> CGSize {
+        var tagViewSize = tag.size(withAttributes: [NSAttributedString.Key.font: textFont])
+        tagViewSize.height = textFont.pointSize + paddingY * 2
+        tagViewSize.width += paddingX * 2
+        if tagViewSize.width < tagViewSize.height {
+            tagViewSize.width = tagViewSize.height
+        }
+        return tagViewSize
+    }
+    public static func estimateHeight(tags: [String],
+                                      width: CGFloat,
+                                      textFont: UIFont,
+                                      alignment: Alignment = .left,
+                                      paddingX: CGFloat = 0,
+                                      paddingY: CGFloat = 0,
+                                      marginX: CGFloat = 0,
+                                      marginY: CGFloat = 0,
+                                      fixedHeight: CGFloat = 0) -> CGFloat {
+//        var currentRow = 0
+//        var currentRowTagCount = 0
+//        var currentRowWidth: CGFloat = 0
+//        let frameWidth = width
+//        var currentRowHeight: CGFloat = 0
+//
+//        for tag in tags {
+//            let tagViewSize = Self.estimateTagViewSize(tag: tag, textFont: textFont, paddingX: paddingX, paddingY: paddingY)
+//            currentRowHeight = tagViewSize.height
+//        }
+        return 0
     }
     
     private func createNewTagView(_ title: String) -> TagView {
